@@ -1,1 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Express Capital Associate Form Upload</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
+    h1 { color: #333; text-align: center; }
+    form {
+      background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 400px; margin: 24px auto 0 auto;
+    }
+    label { display: block; margin-bottom: 10px; color: #444; font-weight: 500; }
+    input[type="file"], input[type="email"], input[type="text"], textarea {
+      margin-bottom: 20px; width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1em;
+    }
+    .button-row { display: flex; gap: 10px; margin-top: 10px; }
+    button {
+      background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; flex: 1 1 0;
+    }
+    button[type="button"] { background-color: #d32f2f; }
+    button[type="button"]:hover { background-color: #b71c1c; }
+    button[type="submit"]:hover { background-color: #45a049; }
+    .note, .instructions { font-size: 0.97em; color: #666; margin-bottom: 15px; text-align: center; }
+    .instructions { color: #222; background: #e8f9f4; border: 1px solid #b2dfdb; border-radius: 6px; padding: 10px 8px; margin-bottom: 18px; }
+    .docusign-section {
+      max-width: 400px; margin: 28px auto 0 auto; text-align: center; background: #fdf6e3; padding: 15px 20px;
+      border-radius: 8px; border: 1px solid #ffe082; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .docusign-section button {
+      background-color: #00488A; color: #fff; border-radius: 5px; font-size: 17px; padding: 10px 16px; margin-top: 8px;
+      border: none; cursor: pointer; transition: background 0.2s;
+    }
+    .docusign-section button:hover { background-color: #002b4d; }
+  </style>
+</head>
+<body>
+  <h1>Express Capital Associate Form Upload</h1>
+  <div class="note">
+    Accepted file types: PDF, JPG, JPEG, PNG, DOC, DOCX, TXT. Max file size: 5MB each.
+  </div>
+  <div class="instructions">
+    Please upload each document in its corresponding section below.
+  </div>
+  <form id="uploadForm" action="https://formbold.com/s/3dpMx" method="POST" enctype="multipart/form-data">
+    <label for="fullName">Full Name:</label>
+    <input type="text" id="fullName" name="fullName" placeholder="Your full name" required>
 
+    <label for="email">Email Address:</label>
+    <input type="email" id="email" name="email" placeholder="you@email.com" required>
+
+    <label for="phone">Phone Number:</label>
+    <input type="text" id="phone" name="phone" placeholder="(123) 456-7890" required>
+
+    <label for="businessName">Business Name:</label>
+    <input type="text" id="businessName" name="businessName" placeholder="Your company name" required>
+
+    <label for="bankStatements">4 Most Recent Bank Statements:</label>
+    <input type="file" id="bankStatements" name="bankStatements" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" multiple required>
+    <div class="note" style="margin-top:-10px;">
+      You may select up to 4 files at once.
+    </div>
+
+    <label for="taxReturn">1040 Tax Return (if needed):</label>
+    <input type="file" id="taxReturn" name="taxReturn" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt">
+
+    <label for="driversLicense">Copy of Driver's License:</label>
+    <input type="file" id="driversLicense" name="driversLicense" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" required>
+
+    <label for="voidedCheck">Voided Check Copy:</label>
+    <input type="file" id="voidedCheck" name="voidedCheck" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" required>
+
+    <label for="otherDocs">Other Documents (if needed):</label>
+    <input type="file" id="otherDocs" name="otherDocs" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" multiple>
+
+    <label for="message">Comments or Notes:</label>
+    <textarea id="message" name="message" rows="3" placeholder="Add any additional comments (optional)"></textarea>
+    
+    <div class="button-row">
+      <button type="button" id="cancelBtn">Cancel</button>
+      <button type="submit">Upload Files</button>
+    </div>
+  </form>
+  <div class="docusign-section">
+    <p><strong>Need to e-sign your documents?</strong></p>
+      <a href="#" target="_blank" rel="noopener">
+        <button type="button">Sign with DocuSign</button>
+      </a>
+      <!-- Replace # above with your DocuSign/Google e-signature link when ready -->
+  </div>
+  <script>
+    // Validate file size before upload (for all file inputs)
+    document.getElementById("uploadForm").addEventListener("submit", function(event) {
+      let allFilesValid = true;
+      ["bankStatements", "taxReturn", "driversLicense", "voidedCheck", "otherDocs"].forEach(function(id) {
+        const fileInput = document.getElementById(id);
+        if (fileInput && fileInput.files.length > 0) {
+          for (let i = 0; i < fileInput.files.length; i++) {
+            if (fileInput.files[i].size > 5 * 1024 * 1024) {
+              alert("One or more files exceed the 5MB limit.");
+              allFilesValid = false;
+              break;
+            }
+          }
+        }
+      });
+      if (!allFilesValid) event.preventDefault();
+    });
+
+    // Cancel button logic: clears all file inputs
+    document.getElementById("cancelBtn").addEventListener("click", function() {
+      document.getElementById("uploadForm").reset();
+    });
+  </script>
+</body>
+</html>
